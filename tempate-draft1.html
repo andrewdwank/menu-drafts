@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Restaurant Menu</title>
+    <style>
+        :root {
+            --accent: #e67e22;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--dark);
+            color: white;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .category-header {
+            font-size: 2rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 15px;
+            margin: 40px 0 20px;
+            color: var(--dark);
+        }
+
+        /* --- THE GRID SYSTEM --- */
+        .menu-grid {
+            display: grid;
+            gap: 20px;
+            /* Default: 4 columns for wide screens */
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        
+
+        /* Menu Item Styling */
+        .menu-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item-price {
+            color: var(--accent);
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin: 8px 0;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px dotted #555;
+        }
+
+        /* Medium screens (e.g., Laptops/Tablets) - 3 Columns */
+        @media (max-width: 1100px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+             .menu-card img {
+                height: 140px;
+            }
+        }
+
+        /* Small screens (e.g., Large Phones) - 2 Columns */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .menu-card img {
+                height: 140px;
+            }
+        }
+
+        /* Extra Small (Mobile) - 1 Column for better readability */
+        @media (max-width: 480px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .item-desc {
+                font-size: 0.65rem;
+                margin-top: 6px;
+                line-height: 1.2;
+            }
+
+            .item-name {
+                font-size: 0.8rem;
+            }
+
+            .menu-card img {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="restaurantHeader"></h1>
+        <p id="restaurantTagline"></p>
+    </header>
+
+    <div class="container">
+        
+        <div id="menuSections"></div>
+
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p id="footerAddress"></p>
+            <p id="footerWhatsapp"></p>
+        </div>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">YouTube</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+<script src="config(12).js"></script>
+<script>
+    const headerEl = document.getElementById("restaurantHeader");
+
+    if (restaurantConfig.header.type === "logo") {
+        const img = document.createElement("img");
+        img.src = "img/" + restaurantConfig.header.logoFilename;
+        img.alt = "Restaurant Logo";
+        img.style.maxHeight = "80px";
+        headerEl.appendChild(img);
+    } else if (restaurantConfig.header.type === "text") {
+        headerEl.textContent = restaurantConfig.header.text;
+    }
+
+    document.getElementById("restaurantTagline").textContent =
+    restaurantConfig.tagline || "";
+
+    const colors = restaurantConfig.colors;
+    const root = document.documentElement;
+
+    if (colors) {
+        root.style.setProperty("--accent", colors.secondary);
+        root.style.setProperty("--dark", colors.primary);
+    
+    const menuRoot = document.getElementById("menuSections");
+
+    restaurantConfig.sections.forEach(section => {
+    // Section title
+    const h2 = document.createElement("h2");
+    h2.className = "category-header";
+    h2.textContent = section.name.replace(/-/g, " ");
+    menuRoot.appendChild(h2);
+
+    // Grid
+    const grid = document.createElement("div");
+    grid.className = "menu-grid";
+
+    section.items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "menu-card";
+
+        card.innerHTML = `
+            <img src="img/${item.imageFilename}" alt="${item.name}">
+            <div class="card-content">
+                <div class="item-name">
+                    ${item.name}
+                    <span>${item.price}</span>
+                </div>
+                <p class="item-desc">${item.description}</p>
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+
+    menuRoot.appendChild(grid);
+    });
+
+    }
+
+    document.getElementById("footerAddress").textContent =
+        restaurantConfig.contact.address;
+
+    document.getElementById("footerWhatsapp").textContent =
+        "WhatsApp: " + restaurantConfig.contact.whatsapp;
+
+    const social = restaurantConfig.socialMedia;
+    const links = document.querySelectorAll(".social-links a");
+
+    links.forEach(link => {
+        const key = link.textContent.toLowerCase();
+        if (social[key]) {
+            link.href = social[key];
+            link.target = "_blank";
+        } else {
+            link.style.display = "none";
+        }
+    });
+
+
+</script>
+
+</body>
+</html>

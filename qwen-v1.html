@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Menu Restoran</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f7fa;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .note {
+      background: #e8f4fc;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    h2 {
+      margin-top: 30px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #3498db;
+      color: #2980b9;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+    }
+    textarea {
+      height: 60px;
+      resize: vertical;
+    }
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background: #2980b9;
+    }
+    .btn-remove {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      border-radius: 3px;
+      float: right;
+    }
+    .section-block {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #3498db;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .menu-item {
+      background: #f9f9f9;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 6px;
+      position: relative;
+    }
+    .array-controls {
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍽️ Admin Panel - Konfigurasi Menu Restoran</h1>
+  
+  <div class="note">
+    <strong>Catatan:</strong> Pastikan semua gambar (logo, menu, dekorasi) sudah di-upload ke folder <code>/img/</code>. 
+    Di form ini, cukup masukkan <strong>nama file lengkap</strong> (misal: <code>logo.png</code>, <code>nasi-goreng.jpg</code>).
+  </div>
+
+  <!-- HEADER -->
+  <h2>1. Header</h2>
+  <div class="form-group">
+    <label>Judul Restoran</label>
+    <div class="radio-group">
+      <div class="radio-option">
+        <input type="radio" id="headerText" name="headerType" value="text" checked>
+        <label for="headerText">Teks</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="headerLogo" name="headerType" value="logo">
+        <label for="headerLogo">Logo (file)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group" id="textHeaderGroup">
+    <label for="headerTextValue">Teks Judul</label>
+    <input type="text" id="headerTextValue" value="Warung Nusantara">
+  </div>
+
+  <div class="form-group" id="logoHeaderGroup" style="display:none;">
+    <label for="headerLogoFile">Nama File Logo (di folder /img/)</label>
+    <input type="text" id="headerLogoFile" placeholder="logo.png">
+  </div>
+
+  <!-- TAGLINE -->
+  <h2>2. Tagline</h2>
+  <div class="form-group">
+    <label for="tagline">Tagline Restoran</label>
+    <textarea id="tagline">Nikmati cita rasa autentik dari seluruh Indonesia!</textarea>
+  </div>
+
+  <!-- SECTIONS (KATEGORI + MENU) -->
+  <h2>3. Menu (dikelompokkan per Kategori)</h2>
+  <div id="sectionsContainer"></div>
+  <button type="button" class="btn" onclick="addSection()">+ Tambah Kategori</button>
+
+  <!-- EXTRA IMAGES -->
+  <h2>4. Gambar Tambahan (Desain)</h2>
+  <div id="extraImagesContainer"></div>
+  <button type="button" class="btn" onclick="addExtraImage()">+ Tambah Gambar</button>
+
+  <!-- CONTACT -->
+  <h2>5. Kontak & Lokasi</h2>
+  <div class="form-group">
+    <label for="address">Alamat Lengkap</label>
+    <textarea id="address">Jl. Raya Kuliner No. 45, Jakarta Selatan</textarea>
+  </div>
+  <div class="form-group">
+    <label for="whatsapp">Nomor WhatsApp (format: +628...)</label>
+    <input type="text" id="whatsapp" value="+6281234567890">
+  </div>
+
+  <!-- SOCIAL MEDIA -->
+  <h2>6. Media Sosial</h2>
+  <div class="form-group">
+    <label for="ig">Instagram URL</label>
+    <input type="text" id="ig" value="https://instagram.com/warungnusantara">
+  </div>
+  <div class="form-group">
+    <label for="fb">Facebook URL</label>
+    <input type="text" id="fb" value="https://facebook.com/warungnusantara">
+  </div>
+  <div class="form-group">
+    <label for="yt">YouTube URL</label>
+    <input type="text" id="yt" value="">
+  </div>
+  <div class="form-group">
+    <label for="tw">Twitter/X URL</label>
+    <input type="text" id="tw" value="https://x.com/warungnusantara">
+  </div>
+
+  <!-- GENERATE BUTTON -->
+  <div style="text-align: center; margin-top: 30px;">
+    <button class="btn" onclick="generateConfig()">💾 Simpan & Generate config.js</button>
+  </div>
+
+  <script src="scripty.js"></script>
+</body>
+</html>

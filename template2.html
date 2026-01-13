@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant Menu</title>
+  <style id="dynamic-styles">
+    /* Base styles will be replaced with dynamic colors */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header styles */
+    header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
+    
+    .tagline {
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+    
+    /* Section styles */
+    .menu-section {
+      margin-bottom: 40px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .section-header {
+      padding: 15px 20px;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .menu-items {
+      padding: 20px;
+    }
+    
+    .menu-item {
+      display: flex;
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .menu-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .item-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    
+    .item-name {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    
+    .item-description {
+      margin-bottom: 10px;
+    }
+    
+    .item-price {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    /* Contact section */
+    .contact-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-top: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .contact-header {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .contact-item {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .contact-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-link {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .menu-item {
+        flex-direction: column;
+      }
+      
+      .item-image {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .contact-info {
+        flex-direction: column;
+      }
+    }
+    
+    /* Loading state */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 1.5rem;
+    }
+    
+    /* Error state */
+    .error {
+      padding: 40px;
+      text-align: center;
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">Loading menu...</div>
+  <div id="error" class="error" style="display: none;"></div>
+  <div id="content" class="container" style="display: none;">
+    <!-- Content will be generated here -->
+  </div>
+
+  <script>
+    // Load the config.js file
+    async function loadConfig() {
+      try {
+        const response = await fetch('config(7).js');
+        if (!response.ok) {
+          throw new Error(`Failed to load config(7).js: ${response.status} ${response.statusText}`);
+        }
+        
+        const jsText = await response.text();
+        // Extract JSON from the JS file
+        const jsonMatch = jsText.match(/restaurantConfig\s*=\s*({[\s\S]*})\s*;?/);
+        if (!jsonMatch) {
+          throw new Error('Invalid config(7).js format: restaurantConfig not found');
+        }
+        
+        const config = JSON.parse(jsonMatch[1]);
+        return config;
+      } catch (error) {
+        console.error('Error loading config:', error);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = `Error loading configuration: ${error.message}`;
+        throw error;
+      }
+    }
+    
+    // Apply dynamic styles based on config
+    function applyStyles(config) {
+      const colors = config.colors || {};
+      const styleEl = document.getElementById('dynamic-styles');
+      
+      // Default colors if not provided
+      const primary = colors.primary || '#3498db';
+      const secondary = colors.secondary || '#f5f7fa';
+      const accent = colors.accent || '#2980b9';
+      const danger = colors.danger || '#e74c3c';
+      const success = colors.success || '#2ecc71';
+      const heading = colors.heading || '#2c3e50';
+      const bodyText = colors.bodyText || '#333333';
+      const mutedText = colors.mutedText || '#7f8c8d';
+      
+      // Create dynamic CSS
+      const dynamicCSS = `
+        body {
+          background-color: ${secondary};
+          color: ${bodyText};
+        }
+        
+        header {
+          background-color: ${primary};
+          color: white;
+        }
+        
+        .tagline {
+          color: ${heading};
+        }
+        
+        .section-header {
+          background-color: ${primary};
+          color: white;
+        }
+        
+        .item-image {
+          border: 2px solid ${primary};
+        }
+        
+        .item-name {
+          color: ${heading};
+        }
+        
+        .item-description {
+          color: ${mutedText};
+        }
+        
+        .item-price {
+          color: ${primary};
+        }
+        
+        .contact-header {
+          color: ${heading};
+        }
+        
+        .contact-label {
+          color: ${primary};
+        }
+        
+        .social-link {
+          background-color: ${primary};
+          color: white;
+        }
+        
+        .social-link:hover {
+          transform: translateY(-3px);
+          background-color: ${accent};
+        }
+        
+        footer {
+          color: ${mutedText};
+        }
+      `;
+      
+      // Append dynamic styles
+      const styleSheet = document.createElement('style');
+      styleSheet.textContent = dynamicCSS;
+      document.head.appendChild(styleSheet);
+    }
+    
+    // Generate menu HTML
+    function generateMenuHTML(config) {
+      let html = '';
+      
+      // Header
+      if (config.header) {
+        html += '<header>';
+        if (config.header.type === 'logo' && config.header.logoFilename) {
+          html += `<div class="logo-container">
+                    <img src="img/${config.header.logoFilename}" alt="Restaurant Logo" class="logo">
+                  </div>`;
+        } else if (config.header.text) {
+          html += `<h1>${config.header.text}</h1>`;
+        }
+        if (config.tagline) {
+          html += `<div class="tagline">${config.tagline}</div>`;
+        }
+        html += '</header>';
+      }
+      
+      // Menu Sections
+      if (config.sections && config.sections.length > 0) {
+        html += '<div class="menu-sections">';
+        config.sections.forEach(section => {
+          if (section.items && section.items.length > 0) {
+            html += `<div class="menu-section">
+                      <div class="section-header">${section.name}</div>
+                      <div class="menu-items">`;
+            
+            section.items.forEach(item => {
+              html += `<div class="menu-item">
+                        <img src="img/${item.imageFilename}" alt="${item.name}" class="item-image">
+                        <div class="item-details">
+                          <div class="item-name">${item.name}</div>
+                          <div class="item-description">${item.description}</div>
+                          <div class="item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                        </div>
+                      </div>`;
+            });
+            
+            html += '</div></div>';
+          }
+        });
+        html += '</div>';
+      }
+      
+      // Contact Section
+      if (config.contact || config.socialMedia) {
+        html += '<div class="contact-section">';
+        html += '<div class="contact-header">Kontak & Lokasi</div>';
+        html += '<div class="contact-info">';
+        
+        if (config.contact) {
+          if (config.contact.address) {
+            html += `<div class="contact-item">
+                      <div class="contact-label">Alamat</div>
+                      <div>${config.contact.address}</div>
+                    </div>`;
+          }
+          if (config.contact.whatsapp) {
+            html += `<div class="contact-item">
+                      <div class="contact-label">WhatsApp</div>
+                      <div>${config.contact.whatsapp}</div>
+                    </div>`;
+          }
+        }
+        
+        html += '</div>';
+        
+        // Social Media Links
+        if (config.socialMedia) {
+          const socialLinks = [];
+          if (config.socialMedia.instagram) {
+            socialLinks.push({url: config.socialMedia.instagram, label: 'IG'});
+          }
+          if (config.socialMedia.facebook) {
+            socialLinks.push({url: config.socialMedia.facebook, label: 'FB'});
+          }
+          if (config.socialMedia.youtube) {
+            socialLinks.push({url: config.socialMedia.youtube, label: 'YT'});
+          }
+          if (config.socialMedia.twitter) {
+            socialLinks.push({url: config.socialMedia.twitter, label: 'X'});
+          }
+          
+          if (socialLinks.length > 0) {
+            html += '<div class="social-links">';
+            socialLinks.forEach(link => {
+              html += `<a href="${link.url.trim()}" class="social-link" target="_blank">${link.label}</a>`;
+            });
+            html += '</div>';
+          }
+        }
+        
+        html += '</div>';
+      }
+      
+      // Footer
+      html += `<footer>
+                &copy; ${new Date().getFullYear()} Restaurant. All rights reserved.
+              </footer>`;
+      
+      return html;
+    }
+    
+    // Initialize the page
+    async function init() {
+      try {
+        const config = await loadConfig();
+        applyStyles(config);
+        const content = generateMenuHTML(config);
+        document.getElementById('content').innerHTML = content;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      } catch (error) {
+        console.error('Failed to initialize menu:', error);
+      }
+    }
+    
+    // Start initialization when page loads
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
