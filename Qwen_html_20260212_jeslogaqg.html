@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Jardin Élégant | Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #f9f5f0;
+            color: #3a3226;
+            line-height: 1.6;
+            padding: 0;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Updated Header with reliable image and fallback */
+        header {
+            text-align: left;
+            height: 150px;
+            /* Fallback color (dark brown) in case image fails */
+            background-color: #3a3226; 
+            /* Dark overlay + New Image URL */
+            background-image: 
+                            url('https://plus.unsplash.com/premium_photo-1700611160981-94d60eb154fa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center; 
+            justify-content: flex-end; 
+            position: relative;
+            border-bottom: none;
+        }
+
+        .header-content {
+            width: 45%; /* Slightly wider for better text flow on mobile */
+            padding-right: 1.5rem;
+            z-index: 2;
+        }
+
+        .restaurant-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            /* line-height: 1.1; */
+            margin-bottom: 0.5rem;
+            color: #ececec; 
+            /* text-shadow: 0px 0px 6px rgb(253, 253, 253); */
+        }
+
+        .tagline {
+            font-size: 0.6em;
+            font-style: italic;
+            line-height: 1.4;
+            color: #ececec;
+            /* text-shadow: 0px 0px 6px rgb(253, 253, 253); */
+        }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 1.5rem;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 1rem;
+            position: relative;
+            color: #5a4a3f;
+        }
+
+        .category-title::after {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: #c9b9a5;
+            margin: 0.8rem auto;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.2rem 0;
+            border-bottom: 1px dashed #e0d6c9;
+        }
+
+        .item-info {
+            flex: 1;
+            padding-right: 1rem;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 0.4rem;
+            color: #5a4a3f;
+        }
+
+        .item-description {
+            font-size: 1rem;
+            color: #7a6a5a;
+            font-style: italic;
+        }
+
+        .item-price {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #5a4a3f;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #5a4a3f;
+            color: #e0d6c9;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #f9f5f0;
+        }
+
+        .address {
+            margin: 1rem 0;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-link {
+            color: #e0d6c9;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .social-link:hover {
+            color: #f9f5f0;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #7a6a5a;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .restaurant-name {
+                font-size: 1rem;
+            }
+            
+            .category-title {
+                font-size: 1.6rem;
+            }
+            
+            .item-name {
+                font-size: 1.15rem;
+            }
+            
+            .item-price {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 class="restaurant-name">Le Jardin Élégant</h1>
+            <p class="tagline">Exquisite French cuisine in an intimate garden setting</p>
+        </div>
+    </header>
+
+    <!-- Menu Section -->
+    <main class="menu-section">
+        <!-- Food Category -->
+        <section class="food-category">
+            <h2 class="category-title">Food</h2>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Duck Confit</div>
+                    <div class="item-description">Slow-cooked duck leg with rosemary potatoes and cherry gastrique</div>
+                </div>
+                <div class="item-price">$28</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Coq au Vin</div>
+                    <div class="item-description">Traditional braised chicken with lardons, mushrooms, and red wine sauce</div>
+                </div>
+                <div class="item-price">$26</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Ratatouille Provençale</div>
+                    <div class="item-description">Seasonal vegetables slow-cooked with herbs de Provence and olive oil</div>
+                </div>
+                <div class="item-price">$22</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Beef Bourguignon</div>
+                    <div class="item-description">Tender beef braised in red wine with pearl onions and carrots</div>
+                </div>
+                <div class="item-price">$32</div>
+            </div>
+        </section>
+
+        <!-- Beverages Category -->
+        <section class="beverages-category">
+            <h2 class="category-title">Beverages</h2>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Champagne Selection</div>
+                    <div class="item-description">House selection of fine French champagnes</div>
+                </div>
+                <div class="item-price">$14/glass</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Artisan Cocktails</div>
+                    <div class="item-description">Handcrafted cocktails with house-infused spirits</div>
+                </div>
+                <div class="item-price">$16</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">French Press Coffee</div>
+                    <div class="item-description">Single-origin beans, freshly ground and brewed</div>
+                </div>
+                <div class="item-price">$6</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Mineral Water</div>
+                    <div class="item-description">Still or sparkling, imported from the Alps</div>
+                </div>
+                <div class="item-price">$5</div>
+            </div>
+        </section>
+
+        <!-- Desserts Category -->
+        <section class="desserts-category">
+            <h2 class="category-title">Desserts</h2>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Crème Brûlée</div>
+                    <div class="item-description">Classic vanilla custard with caramelized sugar crust</div>
+                </div>
+                <div class="item-price">$12</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Tarte Tatin</div>
+                    <div class="item-description">Upside-down caramelized apple tart with crème fraîche</div>
+                </div>
+                <div class="item-price">$14</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Chocolate Soufflé</div>
+                    <div class="item-description">Dark chocolate soufflé with Grand Marnier crème anglaise</div>
+                </div>
+                <div class="item-price">$16</div>
+            </div>
+            
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Cheese Selection</div>
+                    <div class="item-description">Curated French cheeses with quince paste and walnut bread</div>
+                </div>
+                <div class="item-price">$18</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-name">Le Jardin Élégant</div>
+        <div class="address">123 Rue de la Gastronomie<br>Paris, France 75001</div>
+        
+        <div class="social-links">
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">Facebook</a>
+            <a href="#" class="social-link">Twitter</a>
+        </div>
+        
+        <div class="copyright">© 2026 Le Jardin Élégant. All rights reserved.</div>
+    </footer>
+</body>
+</html>
